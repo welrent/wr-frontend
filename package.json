@@ -1,17 +1,17 @@
 {
-  "name": "htdocs",
+  "name": "welrent-frontend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "description": "Welrent public frontend monorepo (Next.js, PHP API, JS SDK, Flutter)",
+  "private": true,
   "scripts": {
     "dev": "npm run dev --prefix next-web",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:api": "php -S 127.0.0.1:8080 index.php",
+    "test:sdk": "npm test --prefix sdk",
+    "smoke:sdk": "npm run smoke --prefix sdk",
+    "capture:proof": "node scripts/capture-proof.mjs"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["welrent", "rental", "nextjs"],
+  "author": "Welrent",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {

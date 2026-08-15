@@ -1,19 +1,16 @@
+import { fetchCars } from '@/lib/api';
+
 export default async function Offerlist({
     searchParams,
 }: {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
     const resolvedParams = await searchParams;
-    let cars: any[] = [];
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-    try {
-        if (apiBase) {
-            const res = await fetch(`${apiBase}/api/cars`, { cache: "no-store" });
-            if (res.ok) {
-                cars = await res.json();
-            }
-        }
-    } catch (e) {}
+    const cars = await fetchCars();
+    const locationParam = resolvedParams.location;
+    const location = Array.isArray(locationParam)
+        ? locationParam[0]
+        : locationParam || 'Anywhere';
 
     return (
         <div className="page-wrapper">
@@ -23,7 +20,7 @@ export default async function Offerlist({
                 <div style={{ marginBottom: '40px', display: 'flex', gap: '20px' }}>
                     <div className="field" style={{ flex: 1, background: '#fff', padding: '15px', borderRadius: '12px' }}>
                         <span style={{ color: '#8C929A', fontSize: '0.85rem' }}>Location</span>
-                        <div style={{ fontWeight: 500 }}>{resolvedParams.location || 'Anywhere'}</div>
+                        <div style={{ fontWeight: 500 }}>{location}</div>
                     </div>
                 </div>
 
@@ -33,7 +30,7 @@ export default async function Offerlist({
                     </div>
                 ) : (
                     <div className="listings-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px' }}>
-                        {cars.map((car: any) => (
+                        {cars.map((car) => (
                             <div key={car.id} style={{ background: car.is_dark_mode ? '#1C263A' : '#fff', color: car.is_dark_mode ? '#fff' : '#1C263A', borderRadius: '16px', padding: '30px 20px', position: 'relative' }}>
                                 <div style={{ fontSize: '0.9rem', opacity: 0.8 }}>{car.subtitle}</div>
                                 <h3 style={{ fontSize: '1.8rem', fontWeight: 700, margin: '5px 0 20px' }}>{car.name}</h3>

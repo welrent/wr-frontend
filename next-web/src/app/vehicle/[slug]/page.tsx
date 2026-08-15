@@ -1,15 +1,8 @@
+import { fetchVehicle } from '@/lib/api';
+
 export default async function Vehicle({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    let vehicle = null;
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || '';
-    try {
-        if (apiBase) {
-            const res = await fetch(`${apiBase}/api/vehicle/${slug}`, { cache: "no-store" });
-            if (res.ok) {
-                vehicle = await res.json();
-            }
-        }
-    } catch (e) {}
+    const vehicle = await fetchVehicle(slug);
 
     if (!vehicle) {
         return (

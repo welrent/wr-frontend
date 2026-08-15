@@ -17,7 +17,7 @@ import {
     setDoc,
     serverTimestamp,
 } from 'firebase/firestore';
-import { auth, storage, db } from '@/lib/firebase';
+import { auth, storage, db, isFirebaseConfigured } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -77,6 +77,11 @@ export default function AccountPage() {
 
     /* ── Load user + Firestore profile ─────────────────────────── */
     useEffect(() => {
+        if (!isFirebaseConfigured || !auth) {
+            setLoading(false);
+            router.push('/login');
+            return;
+        }
         const unsub = onAuthStateChanged(auth, async (u) => {
             if (!u) { router.push('/login'); return; }
             setUser(u);
@@ -84,14 +89,16 @@ export default function AccountPage() {
             setLocalPhotoURL(u.photoURL || '');
 
             // Load bio from Firestore
-            try {
-                const snap = await getDoc(doc(db, 'users', u.uid));
-                if (snap.exists()) {
-                    setBio(snap.data().bio || '');
-                } else {
-                    setBio('');
-                }
-            } catch { /* offline / rules */ }
+            if (db) {
+                try {
+                    const snap = await getDoc(doc(db, 'users', u.uid));
+                    if (snap.exists()) {
+                        setBio(snap.data().bio || '');
+                    } else {
+                        setBio('');
+                    }
+                } catch { /* offline / rules */ }
+            }
 
             setLoading(false);
         });
@@ -114,7 +121,7 @@ export default function AccountPage() {
     /* ── Photo upload ───────────────────────────────────────────── */
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (!file || !user) return;
+        if (!file || !user || !storage) return;
         if (file.size > 5 * 1024 * 1024) {
             setUploadError('Photo must be under 5 MB.');
             return;
@@ -151,7 +158,7 @@ export default function AccountPage() {
 
     /* ── Save bio (Firestore) ───────────────────────────────────── */
     const handleSaveBio = async () => {
-        if (!user) return;
+        if (!user || !db) return;
         setSavingBio(true);
         await setDoc(doc(db, 'users', user.uid), {
             bio: bioInput,
@@ -164,6 +171,7 @@ export default function AccountPage() {
 
     /* ── Sign out ───────────────────────────────────────────────── */
     const handleSignOut = async () => {
+        if (!auth) return;
         setSigningOut(true);
         await signOut(auth);
         router.push('/');

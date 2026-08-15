@@ -1884,3 +1884,128 @@ footer {
     padding-left: 0 !important;
     border-left: none !important;
 }
+
+/* Welrent Act pages */
+.act-page {
+    padding-bottom: 0;
+}
+
+.act-hero {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(92, 170, 246, 0.18), transparent 40%),
+        linear-gradient(160deg, #1C263A 0%, #371947 55%, #1C263A 100%);
+    color: #fff;
+    padding: 140px 0 90px;
+}
+
+.act-hero-inner {
+    max-width: 760px;
+}
+
+.act-logo {
+    height: 56px;
+    width: auto;
+    margin-bottom: 28px;
+    filter: brightness(0) invert(1);
+}
+
+.act-hero h1 {
+    font-size: clamp(2.6rem, 6vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 18px;
+}
+
+.act-hero p,
+.act-section p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    opacity: 0.85;
+    max-width: 640px;
+}
+
+.act-hero-ctas {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+}
+
+.btn-secondary-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 22px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.35);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.act-section {
+    padding: 80px 0;
+}
+
+.act-section h2 {
+    font-size: 2rem;
+    margin: 0 0 16px;
+    color: var(--text-primary);
+}
+
+.act-section--dark {
+    background: #1C263A;
+    color: #fff;
+}
+
+.act-section--dark h2,
+.act-section--dark p {
+    color: #fff;
+}
+
+.act-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.act-card {
+    background: #fff;
+    border: 1px solid var(--border-light);
+    border-radius: 18px;
+    padding: 28px;
+}
+
+.act-card h3 {
+    margin: 0 0 10px;
+    font-size: 1.25rem;
+}
+
+.act-card p {
+    margin: 0 0 18px;
+    color: #6B7280;
+}
+
+.act-card a {
+    color: var(--accent-blue);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.act-cta-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .act-hero {
+        padding: 110px 0 70px;
+    }
+    .act-logo {
+        height: 42px;
+    }
+}

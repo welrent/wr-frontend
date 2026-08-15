@@ -31,7 +31,13 @@ export default function Footer({ footerLinks = {}, content = {} }: { footerLinks
                             <h4>{category}</h4>
                             <ul>
                                 {footerLinks[category].map((link: any, i: number) => (
-                                    <li key={i}><a href={link.url}>{link.title}</a></li>
+                                    <li key={i}>
+                                        {String(link.url || '').startsWith('/') ? (
+                                            <Link href={link.url}>{link.title}</Link>
+                                        ) : (
+                                            <a href={link.url}>{link.title}</a>
+                                        )}
+                                    </li>
                                 ))}
                             </ul>
                         </div>

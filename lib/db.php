@@ -17,11 +17,10 @@ class Database {
         ];
 
         try {
-            // Un-comment to enable live connection when database is imported and ready
+            // Live MySQL when available; otherwise keep null and serve demo payloads.
             $this->pdo = new PDO($dsn, $user, $pass, $options);
-            // $this->pdo = null;
         } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), (int)$e->getCode());
+            $this->pdo = null;
         }
     }
 
@@ -83,7 +82,9 @@ class Database {
     public function getNavbarLinks() {
         if (!$this->pdo) {
             return [
-                ['title' => 'Welrent Act', 'url' => 'https://act.welrent.com/']
+                ['title' => 'Welrent Act', 'url' => '/act'],
+                ['title' => 'Locations', 'url' => '/locations'],
+                ['title' => 'Vehicles', 'url' => '/offerlist'],
             ];
         }
         $stmt = $this->pdo->query('SELECT title, url FROM navbar_links ORDER BY sort_order ASC');
@@ -93,10 +94,24 @@ class Database {
     public function getFooterLinks() {
         if (!$this->pdo) {
             return [
-                'Places' => [['title' => 'Rent in Amsterdam', 'url' => '#']],
-                'Special Cars' => [['title' => 'Electric Cars', 'url' => '#']],
-                'Conditions' => [['title' => 'Insurance', 'url' => '#']],
-                'About' => [['title' => 'Our Mission', 'url' => '#']]
+                'Places' => [
+                    ['title' => 'Rent in Amsterdam', 'url' => '/locations/amsterdam'],
+                    ['title' => 'All destinations', 'url' => '/locations'],
+                ],
+                'Special Cars' => [
+                    ['title' => 'Electric Cars', 'url' => '/offerlist?type=car'],
+                    ['title' => 'Motorbikes', 'url' => '/offerlist?type=motorcycle'],
+                ],
+                'Conditions' => [
+                    ['title' => 'Car agreement (Act)', 'url' => 'https://act.welrent.com/pages/car-rental-agreement'],
+                    ['title' => 'Privacy (Act)', 'url' => 'https://act.welrent.com/pages/privacy'],
+                    ['title' => 'Terms (Act)', 'url' => 'https://act.welrent.com/pages/terms'],
+                ],
+                'About' => [
+                    ['title' => 'Welrent Act', 'url' => '/act'],
+                    ['title' => 'Act on GitHub', 'url' => 'https://github.com/welrent/Act'],
+                    ['title' => 'F1 Sponsorship', 'url' => '/sponsorship/f1/wr/designed'],
+                ],
             ];
         }
         $stmt = $this->pdo->query('SELECT category, title, url FROM footer_links ORDER BY category, sort_order ASC');
