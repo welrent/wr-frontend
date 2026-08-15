@@ -1,13 +1,21 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { onAuthStateChanged, signOut, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth, isFirebaseConfigured } from '@/lib/firebase';
+
+function NavHref({ href, className, children, title }: { href: string; className?: string; children: React.ReactNode; title?: string }) {
+    const isInternal = href.startsWith('/');
+    if (isInternal) {
+        return <Link href={href} className={className} title={title}>{children}</Link>;
+    }
+    return <a href={href} className={className} title={title} target="_blank" rel="noopener noreferrer">{children}</a>;
+}
 
 export default function Header({ navbarLinks = [] }: { navbarLinks: any[] }) {
     const [scrolled, setScrolled] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-    const [authLoading, setAuthLoading] = useState(true);
+    const [authLoading, setAuthLoading] = useState(isFirebaseConfigured);
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -16,6 +24,10 @@ export default function Header({ navbarLinks = [] }: { navbarLinks: any[] }) {
     }, []);
 
     useEffect(() => {
+        if (!auth) {
+            setAuthLoading(false);
+            return;
+        }
         const unsub = onAuthStateChanged(auth, (u) => {
             setUser(u);
             setAuthLoading(false);
@@ -28,9 +40,10 @@ export default function Header({ navbarLinks = [] }: { navbarLinks: any[] }) {
         return user.displayName || user.email?.split('@')[0] || 'Account';
     };
 
-    const handleSignOut = async () => {
-        await signOut(auth);
-    };
+    const filteredLinks = (navbarLinks || []).filter(l => {
+        const t = l?.title?.toLowerCase() || '';
+        return !t.includes('booking') && !t.includes('notification') && !t.includes('chat');
+    });
 
     return (
         <>
@@ -50,11 +63,8 @@ export default function Header({ navbarLinks = [] }: { navbarLinks: any[] }) {
                     </div>
                 </div>
                 <div className="header-right">
-                    {(navbarLinks || []).filter(l => {
-                        const t = l?.title?.toLowerCase() || '';
-                        return !t.includes('booking') && !t.includes('notification') && !t.includes('chat');
-                    }).map((link, idx) => (
-                        <a key={idx} href={link.url}>{link.title}</a>
+                    {filteredLinks.map((link, idx) => (
+                        <NavHref key={idx} href={link.url || '#'}>{link.title}</NavHref>
                     ))}
 
                     <div className="header-shortcuts">
@@ -105,7 +115,7 @@ export default function Header({ navbarLinks = [] }: { navbarLinks: any[] }) {
             </div>
             {/* Mobile-only auth row */}
             <div className="mobile-auth-strip">
-                <a href="https://act.welrent.com" className="mobile-auth-act">Welrent Act</a>
+                <Link href="/act" className="mobile-auth-act">Welrent Act</Link>
                 <span className="mobile-auth-sep">·</span>
                 {authLoading ? (
                     <span className="mobile-auth-status">...</span>
@@ -124,14 +134,11 @@ export default function Header({ navbarLinks = [] }: { navbarLinks: any[] }) {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                 <span>Home</span>
             </Link>
-            {(navbarLinks || []).filter(l => {
-                const t = l?.title?.toLowerCase() || '';
-                return !t.includes('booking') && !t.includes('notification') && !t.includes('chat');
-            }).map((link, idx) => (
-                <a key={idx} href={link.url} className="bottom-nav-item">
+            {filteredLinks.map((link, idx) => (
+                <NavHref key={idx} href={link.url || '#'} className="bottom-nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     <span>{link.title}</span>
-                </a>
+                </NavHref>
             ))}
             <Link href={user ? '/account' : '/login'} className="bottom-nav-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>

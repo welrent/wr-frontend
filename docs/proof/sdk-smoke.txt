@@ -1,0 +1,34 @@
+✔ health
+✔ cars
+✔ vehicle
+✔ content
+✔ nav_footer
+✔ login
+
+SDK smoke passed against http://127.0.0.1:8080
+[
+  {
+    "name": "health",
+    "ok": true
+  },
+  {
+    "name": "cars",
+    "ok": true
+  },
+  {
+    "name": "vehicle",
+    "ok": true
+  },
+  {
+    "name": "content",
+    "ok": true
+  },
+  {
+    "name": "nav_footer",
+    "ok": true
+  },
+  {
+    "name": "login",
+    "ok": true
+  }
+]

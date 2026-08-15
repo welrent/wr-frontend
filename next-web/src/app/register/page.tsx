@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { auth, isFirebaseConfigured } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
@@ -19,6 +19,10 @@ export default function RegisterPage() {
         setError('');
         if (password !== confirm) { setError('Passwords do not match.'); return; }
         if (password.length < 8) { setError('Password must be at least 8 characters.'); return; }
+        if (!isFirebaseConfigured || !auth) {
+            setError('Auth is not configured. Add Firebase env keys to enable registration.');
+            return;
+        }
         setLoading(true);
         try {
             const cred = await createUserWithEmailAndPassword(auth, email, password);

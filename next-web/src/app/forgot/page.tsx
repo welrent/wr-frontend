@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { auth, isFirebaseConfigured } from '@/lib/firebase';
 
 export default function ForgotPage() {
     const [email, setEmail] = useState('');
@@ -13,6 +13,10 @@ export default function ForgotPage() {
     const handleReset = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        if (!isFirebaseConfigured || !auth) {
+            setError('Auth is not configured. Add Firebase env keys to enable password reset.');
+            return;
+        }
         setLoading(true);
         try {
             await sendPasswordResetEmail(auth, email);

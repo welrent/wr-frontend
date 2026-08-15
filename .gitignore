@@ -31,3 +31,7 @@ yarn-error.log*
 **/.dart_tool/
 **/.idea/
 **/.vscode/
+
+# Local capture intermediates
+docs/proof/*.webm
+/tmp/

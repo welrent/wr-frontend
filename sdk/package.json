@@ -1,0 +1,23 @@
+{
+  "name": "@welrent/sdk",
+  "version": "0.1.0",
+  "description": "Welrent public JavaScript/TypeScript SDK for cars, vehicles, auth, and rentals",
+  "type": "module",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "node --test test/sdk.test.js",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "keywords": ["welrent", "sdk", "rental", "cars"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}
