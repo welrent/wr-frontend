@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -59,6 +60,8 @@ export default async function RootLayout({
           <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
       </head>
       <body>
+        {/* Vendored from https://github.com/welrent/Act js/sdk/welrent-sdk.js */}
+        <Script src="/js/sdk/welrent-sdk.js" strategy="afterInteractive" />
         <Header navbarLinks={data.navbar} />
         {children}
         <Footer footerLinks={data.footer} content={content} />

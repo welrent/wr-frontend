@@ -47,14 +47,14 @@ export const DEFAULT_FOOTER = {
         { title: 'Boats & Yachts', url: '/offerlist?type=boat' },
     ],
     Conditions: [
-        { title: 'Insurance', url: '/terms' },
-        { title: 'Privacy', url: '/privacy' },
-        { title: 'Terms', url: '/terms' },
+        { title: 'Car agreement (Act)', url: 'https://act.welrent.com/pages/car-rental-agreement' },
+        { title: 'Privacy (Act)', url: 'https://act.welrent.com/pages/privacy' },
+        { title: 'Terms (Act)', url: 'https://act.welrent.com/pages/terms' },
     ],
     About: [
         { title: 'Welrent Act', url: '/act' },
+        { title: 'Act on GitHub', url: 'https://github.com/welrent/Act' },
         { title: 'F1 Sponsorship', url: '/sponsorship/f1/wr/designed' },
-        { title: 'Our Mission', url: '/act#mission' },
     ],
 };
 

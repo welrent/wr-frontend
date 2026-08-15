@@ -1,14 +1,16 @@
 # Welrent Frontend (public proof)
 
 Public repository: **[github.com/welrent/wr-frontend](https://github.com/welrent/wr-frontend)**  
-Visibility verified: **PUBLIC** (`gh api repos/welrent/wr-frontend` → `"visibility":"public"`).
+Act repository: **[github.com/welrent/Act](https://github.com/welrent/Act)** (public)  
+Visibility verified: **PUBLIC** (`gh api repos/welrent/wr-frontend` / `welrent/Act` → `"visibility":"public"`).
 
 Welrent is a car / motorcycle / boat rental platform with:
 
-- **Next.js web app** (`next-web/`) — marketplace UI + Welrent Act pages
+- **Next.js web app** (`next-web/`) — marketplace UI + Act bridge page
 - **PHP JSON API** (`index.php`, `api/`, `lib/`) — cars, auth, content, rentals
-- **JavaScript SDK** (`sdk/`) — `@welrent/sdk` client for the public API
+- **JavaScript SDK** (`sdk/`) — `@welrent/sdk` API client + vendored `WelrentAuth` from Act
 - **Flutter mobile scaffold** (`flutter-app/`) — consumes the same API
+- **Welrent Act** — smart agreements / legal pages from [`welrent/Act`](https://github.com/welrent/Act)
 
 ## Demo proof
 
@@ -17,10 +19,11 @@ Screenshots and walkthrough video captured from a local run of the public codeba
 | Asset | Description |
 | --- | --- |
 | ![Home](docs/proof/home.png) | Home hero + search |
-| ![Act](docs/proof/act.png) | Welrent Act page (connected from nav/footer) |
+| ![Act](docs/proof/act.png) | Welrent Act bridge connected to github.com/welrent/Act |
 | ![Offer list](docs/proof/offerlist.png) | Vehicles from API / demo fallback |
 | ![Vehicle](docs/proof/vehicle.png) | Vehicle detail (`/vehicle/an-RS6`) |
 | ![SDK](docs/proof/sdk-smoke.png) | `@welrent/sdk` smoke test against PHP API |
+| ![Act SDK](docs/proof/act-sdk.png) | Vendored `WelrentAuth` SDK from Act |
 | Video | [`docs/proof/welrent-walkthrough.mp4`](docs/proof/welrent-walkthrough.mp4) |
 
 ## Quick start
@@ -93,11 +96,15 @@ When MySQL is unavailable the API serves demo cars/content so the web app and SD
 
 ## Welrent Act connection
 
-`act.welrent.com` is not yet publicly resolvable, so Act is first-class inside this app at **`/act`**:
+Connected to the public Act project: **https://github.com/welrent/Act**
 
-- Header mobile strip → `/act`
-- Navbar / footer About → `/act`
-- Act page CTAs → `/offerlist`, `/sponsorship/f1/wr/designed`, home
+- Marketplace bridge page: `/act`
+- Act deployment base: `NEXT_PUBLIC_ACT_BASE_URL` (default `https://act.welrent.com`)
+- Deep links: `/pages/car-rental-agreement`, `/pages/boat-rental-agreement`, `/pages/equipment-rental-agreement`, `/pages/terms`, `/pages/privacy`, `/pages/cookie`, `/pages/accessibility`, `/agreements`
+- SSO SDK vendored from Act: `next-web/public/js/sdk/welrent-sdk.js` (also `sdk/welrent-auth.js`)
+- Notes: [`docs/act/README.md`](docs/act/README.md)
+
+`act.welrent.com` may not resolve in every environment yet; the `/act` hub still lists every Act page path and the public GitHub source.
 
 ## Public proof checklist
 
